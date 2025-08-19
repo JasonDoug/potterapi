@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "running",
+        "succeeded",
+        "failed"
+      ]
+    },
+    "artifact": {
+      "$ref": "#/components/schemas/Artifact"
+    },
+    "tracks": {
+      "type": "object",
+      "properties": {
+        "voiceover": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "start_sec": {
+              "type": "number"
+            }
+          }
+        },
+        "music": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "start_sec": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "type": "string",
+          "nullable": true
+        },
+        "clips": {
+          "type": "string",
+          "nullable": true
+        }
+      }
+    }
+  }
+}

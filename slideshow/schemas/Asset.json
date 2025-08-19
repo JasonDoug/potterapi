@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "nullable": true
+    },
+    "mime": {
+      "type": "string"
+    },
+    "size_bytes": {
+      "type": "integer",
+      "nullable": true
+    },
+    "checksum": {
+      "type": "string",
+      "nullable": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "id",
+    "mime",
+    "created_at"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "voiceover_id": "vo_7",
+  "slideshow_id": "ss_9",
+  "music_id": "bgm_2",
+  "options": {
+    "transition": "crossfade",
+    "transition_sec": 0.5,
+    "resolution": "1080p",
+    "fps": 30,
+    "captions": {
+      "mode": "burn-in"
+    },
+    "ducking": {
+      "enabled": true,
+      "threshold_db": -12,
+      "attack_ms": 120,
+      "release_ms": 300
+    }
+  }
+}

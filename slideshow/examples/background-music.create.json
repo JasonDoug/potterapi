@@ -1,0 +1,10 @@
+{
+  "target": {
+    "voiceover_id": "vo_7",
+    "slideshow_id": "ss_9"
+  },
+  "options": {
+    "style": "ambient-cinematic",
+    "duration_policy": "fit"
+  }
+}

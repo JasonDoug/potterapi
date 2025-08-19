@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "tts",
+        "image",
+        "music",
+        "compose"
+      ]
+    },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "label": {
+      "type": "string",
+      "nullable": true
+    },
+    "description": {
+      "type": "string",
+      "nullable": true
+    }
+  },
+  "required": [
+    "id",
+    "provider",
+    "kind",
+    "defaults"
+  ]
+}

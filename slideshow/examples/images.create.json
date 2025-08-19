@@ -1,0 +1,8 @@
+{
+  "provider": "genai",
+  "mode": "generate",
+  "prompt": "Warm minimalist illustration, 16:9",
+  "count": 4,
+  "aspect_ratio": "16:9",
+  "negative_prompt": "text, watermark"
+}

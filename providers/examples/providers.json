@@ -1,0 +1,26 @@
+[
+  {
+    "id": "runway",
+    "name": "Runway",
+    "category": "video",
+    "description": "Generative video provider",
+    "url": "https://runwayml.com",
+    "status": "active"
+  },
+  {
+    "id": "pika",
+    "name": "Pika Labs",
+    "category": "video",
+    "description": "AI-driven video generation",
+    "url": "https://pika.art",
+    "status": "active"
+  },
+  {
+    "id": "elevenlabs",
+    "name": "ElevenLabs",
+    "category": "voice",
+    "description": "Text-to-speech and voice synthesis",
+    "url": "https://elevenlabs.io",
+    "status": "active"
+  }
+]

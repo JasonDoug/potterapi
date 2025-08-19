@@ -1,0 +1,14 @@
+{
+  "script": {
+    "script_id": "scr_1"
+  },
+  "voice": {
+    "voice_id": "vx_emma"
+  },
+  "options": {
+    "pace": "medium",
+    "format": "wav",
+    "sample_rate_hz": 48000,
+    "ssml": true
+  }
+}

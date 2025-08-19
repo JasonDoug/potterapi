@@ -1,0 +1,86 @@
+{
+  "info": {
+    "name": "Video-Story Patch",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Video",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/videos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "videos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"provider\": \"auto\",\n  \"inputs\": {\n    \"prompt\": \"A cat flying in space\",\n    \"duration_sec\": 10\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Storyboard",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/storyboards",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "storyboards"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"script\": \"A knight enters the castle\",\n  \"beats\": [\n    \"intro\",\n    \"conflict\",\n    \"resolution\"\n  ]\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Story",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/stories",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "stories"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Hero's Journey\",\n  \"script\": \"Once upon a time...\"\n}"
+        }
+      }
+    }
+  ]
+}

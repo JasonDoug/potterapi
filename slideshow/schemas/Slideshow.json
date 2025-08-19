@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "succeeded",
+        "failed"
+      ]
+    },
+    "slides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "beat_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "image": {
+            "type": "object",
+            "properties": {
+              "asset_id": {
+                "type": "string",
+                "nullable": true
+              },
+              "url": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "start_sec": {
+            "type": "number"
+          },
+          "duration_sec": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "type": "string",
+          "nullable": true
+        },
+        "render": {
+          "type": "string",
+          "nullable": true
+        }
+      }
+    }
+  }
+}

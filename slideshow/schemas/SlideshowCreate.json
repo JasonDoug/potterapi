@@ -1,0 +1,110 @@
+{
+  "type": "object",
+  "properties": {
+    "beats": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "beats_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "beats_id"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/BeatItem"
+              }
+            }
+          },
+          "required": [
+            "items"
+          ]
+        }
+      ]
+    },
+    "image_strategy": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "generate",
+            "search",
+            "mix"
+          ],
+          "default": "generate"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "per_beat": {
+          "type": "integer",
+          "default": 1
+        },
+        "prompt_template": {
+          "type": "string",
+          "nullable": true
+        },
+        "prefer_asset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "caption_strategy": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "beat_title",
+            "beat_summary",
+            "section_excerpt",
+            "none"
+          ],
+          "default": "beat_summary"
+        },
+        "max_chars": {
+          "type": "integer",
+          "default": 120
+        }
+      }
+    },
+    "timing_strategy": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "fixed",
+            "fit-voiceover"
+          ],
+          "default": "auto"
+        },
+        "per_slide_sec": {
+          "type": "number",
+          "default": 4.0
+        },
+        "voiceover_id": {
+          "type": "string",
+          "nullable": true
+        }
+      }
+    }
+  },
+  "required": [
+    "beats",
+    "image_strategy"
+  ]
+}

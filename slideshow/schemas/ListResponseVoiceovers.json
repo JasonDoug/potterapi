@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/VoiceoverJob"
+      }
+    },
+    "next": {
+      "type": "string",
+      "nullable": true
+    },
+    "prev": {
+      "type": "string",
+      "nullable": true
+    }
+  }
+}

@@ -1,0 +1,332 @@
+{
+  "info": {
+    "name": "Slideshow Media API",
+    "_postman_id": "b1c3f4e0-0000-4000-8000-20250818090557",
+    "description": "Standalone slideshow pipeline: scripts \u2192 beats \u2192 images \u2192 voiceovers \u2192 background-music \u2192 slideshow-videos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Script",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/scripts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "scripts"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"input\": {\n    \"type\": \"text\",\n    \"text\": \"INTRO...\\n\\nSECTION 1...\\n\\nSECTION 2...\"\n  },\n  \"options\": {\n    \"normalize\": true,\n    \"segment\": \"section\"\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Detect Beats",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/beats",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "beats"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"script\": {\n    \"script_id\": \"scr_1\"\n  },\n  \"options\": {\n    \"granularity\": \"section\",\n    \"max_beats\": 12\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Generate Images",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/images",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "images"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"provider\": \"genai\",\n  \"mode\": \"generate\",\n  \"prompt\": \"Warm minimalist illustration, 16:9\",\n  \"count\": 4,\n  \"aspect_ratio\": \"16:9\",\n  \"negative_prompt\": \"text, watermark\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Voiceover",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/voiceovers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "voiceovers"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"script\": {\n    \"script_id\": \"scr_1\"\n  },\n  \"voice\": {\n    \"voice_id\": \"vx_emma\"\n  },\n  \"options\": {\n    \"pace\": \"medium\",\n    \"format\": \"wav\",\n    \"sample_rate_hz\": 48000,\n    \"ssml\": true\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Slideshow",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/slideshows",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "slideshows"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"beats\": {\n    \"beats_id\": \"bt_3\"\n  },\n  \"image_strategy\": {\n    \"mode\": \"generate\",\n    \"provider\": \"genai\",\n    \"per_beat\": 1,\n    \"prompt_template\": \"{beat.summary}, minimalist, 16:9\"\n  },\n  \"caption_strategy\": {\n    \"source\": \"beat_summary\",\n    \"max_chars\": 110\n  },\n  \"timing_strategy\": {\n    \"mode\": \"auto\",\n    \"per_slide_sec\": 4.5\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Generate Background Music",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/background-music",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "background-music"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"target\": {\n    \"voiceover_id\": \"vo_7\",\n    \"slideshow_id\": \"ss_9\"\n  },\n  \"options\": {\n    \"style\": \"ambient-cinematic\",\n    \"duration_policy\": \"fit\"\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Compose Slideshow Video",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/slideshow-videos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "slideshow-videos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"voiceover_id\": \"vo_7\",\n  \"slideshow_id\": \"ss_9\",\n  \"music_id\": \"bgm_2\",\n  \"options\": {\n    \"transition\": \"crossfade\",\n    \"transition_sec\": 0.5,\n    \"resolution\": \"1080p\",\n    \"fps\": 30,\n    \"captions\": {\n      \"mode\": \"burn-in\"\n    },\n    \"ducking\": {\n      \"enabled\": true,\n      \"threshold_db\": -12,\n      \"attack_ms\": 120,\n      \"release_ms\": 300\n    }\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "List Providers",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/providers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "providers"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Global Capabilities",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/capabilities",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "capabilities"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Image Preset",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/presets",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "presets"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"p_genai_minimal_16x9\",\n  \"provider\": \"genai\",\n  \"kind\": \"image\",\n  \"label\": \"Minimalist 16:9\",\n  \"defaults\": {\n    \"aspect_ratio\": \"16:9\",\n    \"negative_prompt\": \"text, watermark\",\n    \"style\": \"minimalist\"\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Create TTS Preset",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/presets",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "presets"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"p_elevenlabs_doc_narration\",\n  \"provider\": \"elevenlabs\",\n  \"kind\": \"tts\",\n  \"label\": \"Doc Narration 48kHz\",\n  \"defaults\": {\n    \"voice_id\": \"vx_emma\",\n    \"sample_rate_hz\": 48000,\n    \"format\": \"wav\",\n    \"pace\": \"medium\",\n    \"ssml\": true\n  }\n}"
+        }
+      }
+    }
+  ]
+}

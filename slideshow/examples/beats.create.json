@@ -1,0 +1,9 @@
+{
+  "script": {
+    "script_id": "scr_1"
+  },
+  "options": {
+    "granularity": "section",
+    "max_beats": 12
+  }
+}

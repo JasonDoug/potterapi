@@ -1,0 +1,55 @@
+{
+  "type": "object",
+  "properties": {
+    "script": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "script_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "script_id"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "text"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "text"
+          ]
+        }
+      ]
+    },
+    "options": {
+      "type": "object",
+      "properties": {
+        "granularity": {
+          "type": "string",
+          "enum": [
+            "sentence",
+            "paragraph",
+            "section"
+          ],
+          "default": "section"
+        },
+        "max_beats": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "required": [
+    "script"
+  ]
+}

@@ -1,0 +1,149 @@
+
+openapi: 3.1.0
+info:
+  title: Video/Storyboard/Story Patch
+  version: 1.0.0
+  description: Patch fragment to add /videos, /storyboards, and /stories to the existing Providers+Slideshow API.
+paths:
+  /v1/videos:
+    post:
+      tags: [Videos]
+      summary: Create a provider-agnostic video render job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoCreateRequest'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoJob'
+  /v1/videos/{video_id}:
+    get:
+      tags: [Videos]
+      summary: Get status/result for a video job
+      parameters:
+        - in: path
+          name: video_id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoJob'
+  /v1/storyboards:
+    post:
+      tags: [Storyboards]
+      summary: Produce a storyboard (scenes/shots) from text or structured script
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoryboardCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storyboard'
+  /v1/storyboards/{storyboard_id}/render:
+    post:
+      tags: [Storyboards]
+      summary: Render storyboard shots into clips
+      parameters:
+        - in: path
+          name: storyboard_id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoryboardRenderRequest'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryboardRenderJob'
+  /v1/stories:
+    post:
+      tags: [Stories]
+      summary: Orchestrate full story (script → storyboard → video)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoryCreateRequest'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryJob'
+components:
+  schemas:
+    VideoCreateRequest:
+      type: object
+      properties:
+        provider: { type: string }
+        preset_id: { type: string, nullable: true }
+        inputs:
+          type: object
+          properties:
+            prompt: { type: string }
+            duration_sec: { type: integer }
+            fps: { type: integer }
+            resolution: { type: string }
+          required: [prompt]
+    VideoJob:
+      type: object
+      properties:
+        id: { type: string }
+        status: { type: string }
+        artifact_url: { type: string }
+    StoryboardCreateRequest:
+      type: object
+      properties:
+        script: { type: string }
+        beats: { type: array, items: { type: string } }
+    Storyboard:
+      type: object
+      properties:
+        id: { type: string }
+        scenes: { type: array, items: { type: string } }
+    StoryboardRenderRequest:
+      type: object
+      properties:
+        style: { type: string }
+        resolution: { type: string }
+    StoryboardRenderJob:
+      type: object
+      properties:
+        id: { type: string }
+        status: { type: string }
+    StoryCreateRequest:
+      type: object
+      properties:
+        title: { type: string }
+        script: { type: string }
+    StoryJob:
+      type: object
+      properties:
+        id: { type: string }
+        status: { type: string }
+        storyboard_id: { type: string }
+        final_video_url: { type: string }

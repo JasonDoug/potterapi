@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "properties": {
+    "target": {
+      "type": "object",
+      "properties": {
+        "voiceover_id": {
+          "type": "string"
+        },
+        "slideshow_id": {
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "type": "object",
+      "properties": {
+        "style": {
+          "type": "string"
+        },
+        "bpm": {
+          "type": "integer",
+          "nullable": true
+        },
+        "intensity_curve": {
+          "type": "string",
+          "enum": [
+            "flat",
+            "rise",
+            "rise-plateau-outro"
+          ],
+          "default": "rise-plateau-outro"
+        },
+        "stems": {
+          "type": "boolean",
+          "default": false
+        },
+        "duration_policy": {
+          "type": "string",
+          "enum": [
+            "fit",
+            "exact",
+            "at_least"
+          ],
+          "default": "fit"
+        }
+      }
+    }
+  },
+  "required": [
+    "target"
+  ]
+}

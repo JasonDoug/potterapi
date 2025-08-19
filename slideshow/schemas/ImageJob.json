@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "running",
+        "succeeded",
+        "failed"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/ImageItem"
+      }
+    }
+  }
+}

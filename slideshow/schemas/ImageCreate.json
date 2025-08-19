@@ -1,0 +1,61 @@
+{
+  "type": "object",
+  "properties": {
+    "provider": {
+      "type": "string",
+      "example": "genai"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "generate",
+        "search"
+      ],
+      "default": "generate"
+    },
+    "prompt": {
+      "type": "string",
+      "nullable": true
+    },
+    "query": {
+      "type": "string",
+      "nullable": true
+    },
+    "count": {
+      "type": "integer",
+      "default": 4,
+      "minimum": 1,
+      "maximum": 20
+    },
+    "aspect_ratio": {
+      "type": "string",
+      "default": "16:9"
+    },
+    "negative_prompt": {
+      "type": "string",
+      "nullable": true
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "example": "style_ref"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    }
+  },
+  "required": [
+    "provider",
+    "mode"
+  ]
+}

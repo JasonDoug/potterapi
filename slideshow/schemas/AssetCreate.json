@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": [
+        "direct_upload",
+        "presigned_init"
+      ],
+      "default": "direct_upload"
+    },
+    "filename": {
+      "type": "string"
+    },
+    "mime": {
+      "type": "string"
+    },
+    "size_bytes": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "mode",
+    "filename",
+    "mime"
+  ]
+}

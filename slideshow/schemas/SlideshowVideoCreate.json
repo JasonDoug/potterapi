@@ -1,0 +1,83 @@
+{
+  "type": "object",
+  "properties": {
+    "voiceover_id": {
+      "type": "string"
+    },
+    "slideshow_id": {
+      "type": "string"
+    },
+    "music_id": {
+      "type": "string",
+      "nullable": true
+    },
+    "options": {
+      "type": "object",
+      "properties": {
+        "transition": {
+          "type": "string",
+          "enum": [
+            "cut",
+            "crossfade"
+          ],
+          "default": "crossfade"
+        },
+        "transition_sec": {
+          "type": "number",
+          "default": 0.5
+        },
+        "resolution": {
+          "type": "string",
+          "default": "1080p"
+        },
+        "fps": {
+          "type": "integer",
+          "default": 30
+        },
+        "captions": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "none",
+                "burn-in",
+                "sidecar"
+              ],
+              "default": "burn-in"
+            },
+            "style": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        },
+        "ducking": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "threshold_db": {
+              "type": "number",
+              "default": -12
+            },
+            "attack_ms": {
+              "type": "integer",
+              "default": 120
+            },
+            "release_ms": {
+              "type": "integer",
+              "default": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "voiceover_id",
+    "slideshow_id"
+  ]
+}

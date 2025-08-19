@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "text",
+            "json"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "nullable": true
+        },
+        "json": {
+          "type": "object",
+          "nullable": true,
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "options": {
+      "type": "object",
+      "properties": {
+        "normalize": {
+          "type": "boolean",
+          "default": true
+        },
+        "segment": {
+          "type": "string",
+          "enum": [
+            "none",
+            "sentence",
+            "paragraph",
+            "section"
+          ],
+          "default": "section"
+        }
+      }
+    }
+  },
+  "required": [
+    "input"
+  ]
+}

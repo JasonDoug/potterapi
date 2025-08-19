@@ -1,0 +1,13 @@
+{
+  "id": "p_elevenlabs_doc_narration",
+  "provider": "elevenlabs",
+  "kind": "tts",
+  "label": "Doc Narration 48kHz",
+  "defaults": {
+    "voice_id": "vx_emma",
+    "sample_rate_hz": 48000,
+    "format": "wav",
+    "pace": "medium",
+    "ssml": true
+  }
+}

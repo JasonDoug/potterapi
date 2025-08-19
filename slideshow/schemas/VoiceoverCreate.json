@@ -1,0 +1,111 @@
+{
+  "type": "object",
+  "properties": {
+    "script": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "script_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "script_id"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "text"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "text"
+          ]
+        }
+      ]
+    },
+    "voice": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "voice_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "voice_id"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "provider",
+            "name"
+          ]
+        }
+      ]
+    },
+    "options": {
+      "type": "object",
+      "properties": {
+        "pace": {
+          "type": "string",
+          "enum": [
+            "slow",
+            "medium",
+            "fast"
+          ],
+          "default": "medium"
+        },
+        "emphasis": {
+          "type": "string",
+          "enum": [
+            "soft",
+            "normal",
+            "strong"
+          ],
+          "default": "normal"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "wav",
+            "mp3"
+          ],
+          "default": "wav"
+        },
+        "sample_rate_hz": {
+          "type": "integer",
+          "default": 48000
+        },
+        "ssml": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "webhook": {
+      "$ref": "#/components/schemas/Webhook"
+    }
+  },
+  "required": [
+    "script",
+    "voice"
+  ]
+}

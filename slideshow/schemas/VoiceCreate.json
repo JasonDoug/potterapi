@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "source_asset_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "provider",
+    "source_asset_id"
+  ]
+}

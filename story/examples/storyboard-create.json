@@ -1,0 +1,8 @@
+{
+  "script": "A knight enters the castle",
+  "beats": [
+    "intro",
+    "conflict",
+    "resolution"
+  ]
+}

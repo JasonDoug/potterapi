@@ -1,0 +1,19 @@
+{
+  "beats": {
+    "beats_id": "bt_3"
+  },
+  "image_strategy": {
+    "mode": "generate",
+    "provider": "genai",
+    "per_beat": 1,
+    "prompt_template": "{beat.summary}, minimalist, 16:9"
+  },
+  "caption_strategy": {
+    "source": "beat_summary",
+    "max_chars": 110
+  },
+  "timing_strategy": {
+    "mode": "auto",
+    "per_slide_sec": 4.5
+  }
+}

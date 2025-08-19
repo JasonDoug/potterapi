@@ -1,0 +1,52 @@
+openapi: 3.0.3
+info:
+  title: Providers API
+  version: 1.0.0
+  description: API for listing and managing AI content providers and their capabilities.
+servers:
+  - url: http://localhost:4009
+    description: Mock Providers Server
+paths:
+  /providers:
+    get:
+      summary: List providers
+      operationId: listProviders
+      responses:
+        '200':
+          description: List of providers
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/ProviderList.json'
+  /providers/{id}:
+    get:
+      summary: Get provider details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A provider object
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/Provider.json'
+  /providers/{id}/capabilities:
+    get:
+      summary: List provider capabilities
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of capabilities
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/CapabilityList.json'

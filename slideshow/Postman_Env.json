@@ -1,0 +1,19 @@
+{
+  "id": "4f9e0000-0000-4000-8000-20250818090557",
+  "name": "Slideshow API Env",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.example.com",
+      "enabled": true
+    },
+    {
+      "key": "idempotencyKey",
+      "value": "00000000-0000-4000-8000-000000000000",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2025-08-18T09:05:57.640265Z",
+  "_postman_exported_using": "Cherry/Slideshow-Pack"
+}

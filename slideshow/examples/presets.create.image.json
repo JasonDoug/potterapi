@@ -1,0 +1,11 @@
+{
+  "id": "p_genai_minimal_16x9",
+  "provider": "genai",
+  "kind": "image",
+  "label": "Minimalist 16:9",
+  "defaults": {
+    "aspect_ratio": "16:9",
+    "negative_prompt": "text, watermark",
+    "style": "minimalist"
+  }
+}

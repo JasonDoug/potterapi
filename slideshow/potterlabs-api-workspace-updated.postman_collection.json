@@ -1,0 +1,86 @@
+{
+  "info": {
+    "name": "Potterlabs API Workspace",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "potterlabs-workspace"
+  },
+  "item": [
+    {
+      "name": "Providers",
+      "item": [
+        {
+          "name": "List Providers",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/providers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "providers"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Provider Capabilities",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/providers/:id/capabilities",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "providers",
+                ":id",
+                "capabilities"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Slideshow",
+      "item": [
+        {
+          "name": "Generate Slideshow",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/slideshow",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "slideshow"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Video/Story",
+      "item": [
+        {
+          "name": "Generate Story",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/story",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "story"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

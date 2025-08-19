@@ -1,0 +1,116 @@
+{
+  "type": "object",
+  "properties": {
+    "tts": {
+      "type": "object",
+      "properties": {
+        "voices": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sample_rates_hz": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "formats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "ssml"
+          }
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "modes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "generate",
+              "search"
+            ]
+          }
+        },
+        "max_resolution": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "aspect_ratios": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "style_ref"
+          }
+        }
+      }
+    },
+    "music": {
+      "type": "object",
+      "properties": {
+        "styles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "supports_stems": {
+          "type": "boolean"
+        },
+        "max_duration_sec": {
+          "type": "integer"
+        }
+      }
+    },
+    "compose": {
+      "type": "object",
+      "properties": {
+        "transitions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fps": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "resolutions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

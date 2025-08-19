@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Slideshow"
+      }
+    },
+    "next": {
+      "type": "string",
+      "nullable": true
+    },
+    "prev": {
+      "type": "string",
+      "nullable": true
+    }
+  }
+}

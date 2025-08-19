@@ -1,0 +1,59 @@
+{
+  "info": {
+    "name": "Providers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Providers",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/providers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "providers"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Provider",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/providers/runway",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "providers",
+            "runway"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Provider Capabilities",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/providers/runway/capabilities",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "providers",
+            "runway",
+            "capabilities"
+          ]
+        }
+      }
+    }
+  ]
+}

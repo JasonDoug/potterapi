@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "mime": {
+      "type": "string"
+    },
+    "duration_sec": {
+      "type": "number",
+      "nullable": true
+    },
+    "resolution": {
+      "type": "string",
+      "nullable": true
+    }
+  },
+  "required": [
+    "url",
+    "mime"
+  ]
+}

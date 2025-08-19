@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "section_id": {
+      "type": "string",
+      "nullable": true
+    },
+    "title": {
+      "type": "string",
+      "nullable": true
+    },
+    "summary": {
+      "type": "string",
+      "nullable": true
+    }
+  }
+}

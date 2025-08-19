@@ -1,0 +1,7 @@
+{
+  "provider": "auto",
+  "inputs": {
+    "prompt": "A cat flying in space",
+    "duration_sec": 10
+  }
+}

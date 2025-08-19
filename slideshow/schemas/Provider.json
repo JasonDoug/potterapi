@@ -1,0 +1,68 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "example": "genai"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "tts",
+        "image",
+        "music",
+        "compose"
+      ],
+      "description": "Primary modality"
+    },
+    "name": {
+      "type": "string",
+      "example": "GenAI Images"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "degraded",
+        "unavailable"
+      ],
+      "default": "available"
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "latency_ms_estimate": {
+      "type": "integer",
+      "nullable": true
+    },
+    "quota": {
+      "type": "object",
+      "properties": {
+        "rate_limit_per_min": {
+          "type": "integer",
+          "nullable": true
+        },
+        "burst": {
+          "type": "integer",
+          "nullable": true
+        }
+      }
+    },
+    "billing_unit": {
+      "type": "string",
+      "example": "credits"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "status"
+  ]
+}
