@@ -18,6 +18,33 @@ paths:
             application/json:
               schema:
                 $ref: './schemas/ProviderList.json'
+              examples:
+                canonical:
+                  value:
+                    - id: runway
+                      name: Runway
+                      category: video
+                      description: Generative video provider
+                      url: https://runwayml.com
+                      status: active
+                    - id: pika
+                      name: Pika Labs
+                      category: video
+                      description: AI-driven video generation
+                      url: https://pika.art
+                      status: active
+                    - id: elevenlabs
+                      name: ElevenLabs
+                      category: voice
+                      description: Text-to-speech and voice synthesis
+                      url: https://elevenlabs.io
+                      status: active
+                    - id: openrouter
+                      name: OpenRouter
+                      category: text
+                      description: Unified API for LLMs
+                      url: https://openrouter.ai
+                      status: active
   /providers/{id}:
     get:
       summary: Get provider details
@@ -34,6 +61,23 @@ paths:
             application/json:
               schema:
                 $ref: './schemas/Provider.json'
+              examples:
+                runway:
+                  value:
+                    id: runway
+                    name: Runway
+                    category: video
+                    description: Generative video provider
+                    url: https://runwayml.com
+                    status: active
+                openrouter:
+                  value:
+                    id: openrouter
+                    name: OpenRouter
+                    category: text
+                    description: Unified API for LLMs
+                    url: https://openrouter.ai
+                    status: active
   /providers/{id}/capabilities:
     get:
       summary: List provider capabilities
@@ -50,3 +94,23 @@ paths:
             application/json:
               schema:
                 $ref: './schemas/CapabilityList.json'
+              examples:
+                canonical:
+                  value:
+                    - id: image-gen
+                      name: Image Generation
+                      type: images
+                      input_schema: ImageRequest
+                      output_schema: ImageResponse
+                    - id: music-gen
+                      name: Music Generation
+                      type: music
+                      input_schema: MusicRequest
+                      output_schema: MusicResponse
+                openrouter:
+                  value:
+                    - id: text-gen
+                      name: Text Generation
+                      type: text
+                      input_schema: TextRequest
+                      output_schema: TextResponse

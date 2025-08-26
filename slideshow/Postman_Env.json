@@ -4,7 +4,7 @@
   "values": [
     {
       "key": "baseUrl",
-      "value": "https://api.example.com",
+      "value": "http://localhost:4010",
       "enabled": true
     },
     {

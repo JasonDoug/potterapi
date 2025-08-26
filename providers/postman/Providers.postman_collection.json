@@ -21,35 +21,35 @@
       }
     },
     {
-      "name": "Get Provider",
+      "name": "Get Provider (by ID)",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/providers/runway",
+          "raw": "{{baseUrl}}/providers/{{providerId}}",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "providers",
-            "runway"
+            "{{providerId}}"
           ]
         }
       }
     },
     {
-      "name": "Get Provider Capabilities",
+      "name": "Get Provider Capabilities (by ID)",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/providers/runway/capabilities",
+          "raw": "{{baseUrl}}/providers/{{providerId}}/capabilities",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "providers",
-            "runway",
+            "{{providerId}}",
             "capabilities"
           ]
         }

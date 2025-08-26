@@ -1,0 +1,82 @@
+openapi: 3.0.3
+info:
+  title: Potterlabs API (Unified Mock)
+  version: 0.1.0
+  description: >
+    Unified mock that references Providers, Slideshow, and Video/Story specs via $ref.
+servers:
+  - url: http://localhost:4010
+    description: Unified Prism mock
+
+paths:
+  # ----------------------
+  # Providers Pack (refs)
+  # ----------------------
+  /providers:
+    $ref: './providers/openapi-providers.yaml#/paths/~1providers'
+  /providers/{id}:
+    $ref: './providers/openapi-providers.yaml#/paths/~1providers~1{id}'
+  /providers/{id}/capabilities:
+    $ref: './providers/openapi-providers.yaml#/paths/~1providers~1{id}~1capabilities'
+
+  # ----------------------
+  # Slideshow Pack (refs)
+  # ----------------------
+  /v1/assets:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1assets'
+  /v1/assets/{asset_id}:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1assets~1{asset_id}'
+  /v1/scripts:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1scripts'
+  /v1/scripts/{script_id}:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1scripts~1{script_id}'
+  /v1/voices:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1voices'
+  /v1/voiceovers:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1voiceovers'
+  /v1/voiceovers/{voiceover_id}:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1voiceovers~1{voiceover_id}'
+  /v1/beats:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1beats'
+  /v1/images:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1images'
+  /v1/images/{image_job_id}:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1images~1{image_job_id}'
+  /v1/slideshows:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1slideshows'
+  /v1/slideshows/{slideshow_id}:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1slideshows~1{slideshow_id}'
+  /v1/background-music:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1background-music'
+  /v1/background-music/{music_id}:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1background-music~1{music_id}'
+  /v1/slideshow-videos:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1slideshow-videos'
+  /v1/slideshow-videos/{video_id}:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1slideshow-videos~1{video_id}'
+  /v1/events:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1events'
+  /v1/jobs/{job_id}/logs:
+    $ref: './openapi-slideshow.yaml#/paths/~1v1~1jobs~1{job_id}~1logs'
+
+  # ----------------------
+  # Video/Story Patch (refs)
+  # ----------------------
+  /v1/videos:
+    $ref: './story/openapi-video-story.patch.yaml#/paths/~1v1~1videos'
+  /v1/videos/{video_id}:
+    $ref: './story/openapi-video-story.patch.yaml#/paths/~1v1~1videos~1{video_id}'
+  /v1/storyboards:
+    $ref: './story/openapi-video-story.patch.yaml#/paths/~1v1~1storyboards'
+  /v1/storyboards/{storyboard_id}:
+    $ref: './story/openapi-video-story.patch.yaml#/paths/~1v1~1storyboards~1{storyboard_id}'
+  /v1/storyboards/{storyboard_id}/render:
+    $ref: './story/openapi-video-story.patch.yaml#/paths/~1v1~1storyboards~1{storyboard_id}~1render'
+  /v1/stories:
+    $ref: './story/openapi-video-story.patch.yaml#/paths/~1v1~1stories'
+  /v1/stories/{story_id}:
+    $ref: './story/openapi-video-story.patch.yaml#/paths/~1v1~1stories~1{story_id}'
+  /v1/stories/{story_id}/videos:
+    $ref: './story/openapi-video-story.patch.yaml#/paths/~1v1~1stories~1{story_id}~1videos'
+
+components: {}

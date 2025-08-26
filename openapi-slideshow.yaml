@@ -1,1 +1,1706 @@
-# Slideshow API Spec (see slideshow pack)
+openapi: 3.1.0
+info:
+  title: Slideshow Media API
+  version: 1.0.0
+  description: 'Standalone API for producing slideshow-style videos with narration
+    and music. Workflow: /scripts -> /beats -> /images -> /voiceovers -> /background-music
+    -> /slideshow-videos.
+
+    '
+servers:
+- url: http://localhost:4010
+tags:
+- name: Scripts
+- name: Beats
+- name: Images
+- name: Voices
+- name: Voiceovers
+- name: Music
+- name: Background Music
+- name: Slideshows
+- name: Slideshow Videos
+- name: Assets
+- name: Events
+- name: Ops
+- name: Providers
+- name: Capabilities
+- name: Presets
+- name: Health
+paths:
+  /v1/assets:
+    post:
+      tags:
+      - Assets
+      summary: Register an asset (direct upload or presigned URL init)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+  /v1/assets/{asset_id}:
+    get:
+      tags:
+      - Assets
+      summary: Fetch asset metadata
+      parameters:
+      - $ref: '#/components/parameters/AssetId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/scripts:
+    post:
+      tags:
+      - Scripts
+      summary: Normalize and segment a script from text or JSON
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScriptCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+    get:
+      tags:
+      - Scripts
+      summary: List scripts
+      parameters:
+      - $ref: '#/components/parameters/PaginationCursor'
+      - $ref: '#/components/parameters/PaginationLimit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponseScripts'
+  /v1/scripts/{script_id}:
+    get:
+      tags:
+      - Scripts
+      summary: Fetch a script
+      parameters:
+      - $ref: '#/components/parameters/ScriptId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/voices:
+    get:
+      tags:
+      - Voices
+      summary: List available voices
+      parameters:
+      - in: query
+        name: provider
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Voice'
+    post:
+      tags:
+      - Voices
+      summary: Register a custom voice from an asset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Voice'
+  /v1/voiceovers:
+    post:
+      tags:
+      - Voiceovers
+      summary: Create a narrated voiceover from a script or text
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceoverCreate'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceoverJob'
+    get:
+      tags:
+      - Voiceovers
+      summary: List voiceovers
+      parameters:
+      - $ref: '#/components/parameters/PaginationCursor'
+      - $ref: '#/components/parameters/PaginationLimit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponseVoiceovers'
+  /v1/voiceovers/{voiceover_id}:
+    get:
+      tags:
+      - Voiceovers
+      summary: Get voiceover status/result
+      parameters:
+      - $ref: '#/components/parameters/VoiceoverId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceoverJob'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/beats:
+    post:
+      tags:
+      - Beats
+      summary: Detect story beats from a script
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeatsCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beats'
+  /v1/images:
+    post:
+      tags:
+      - Images
+      summary: Generate or select images
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageCreate'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageJob'
+    get:
+      tags:
+      - Images
+      summary: List image jobs
+      parameters:
+      - $ref: '#/components/parameters/PaginationCursor'
+      - $ref: '#/components/parameters/PaginationLimit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponseImageJobs'
+  /v1/images/{image_job_id}:
+    get:
+      tags:
+      - Images
+      summary: Get image job status/results
+      parameters:
+      - $ref: '#/components/parameters/ImageJobId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageJob'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/slideshows:
+    post:
+      tags:
+      - Slideshows
+      summary: Create a slideshow aligned to beats and optional voiceover
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlideshowCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Slideshow'
+    get:
+      tags:
+      - Slideshows
+      summary: List slideshows
+      parameters:
+      - $ref: '#/components/parameters/PaginationCursor'
+      - $ref: '#/components/parameters/PaginationLimit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponseSlideshows'
+  /v1/slideshows/{slideshow_id}:
+    get:
+      tags:
+      - Slideshows
+      summary: Fetch a slideshow
+      parameters:
+      - $ref: '#/components/parameters/SlideshowId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Slideshow'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/background-music:
+    post:
+      tags:
+      - Background Music
+      summary: Generate music bed that fits voiceover/slideshow
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BackgroundMusicCreate'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundMusicJob'
+  /v1/background-music/{music_id}:
+    get:
+      tags:
+      - Background Music
+      summary: Get background-music job
+      parameters:
+      - $ref: '#/components/parameters/BackgroundMusicId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundMusicJob'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/slideshow-videos:
+    post:
+      tags:
+      - Slideshow Videos
+      summary: Compose final slideshow video from voiceover, slideshow, and music
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlideshowVideoCreate'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlideshowVideoJob'
+  /v1/slideshow-videos/{video_id}:
+    get:
+      tags:
+      - Slideshow Videos
+      summary: Get composite slideshow video job
+      parameters:
+      - $ref: '#/components/parameters/SlideshowVideoId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlideshowVideoJob'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/events:
+    get:
+      tags:
+      - Events
+      summary: Stream job updates via Server-Sent Events (SSE)
+      parameters:
+      - in: query
+        name: cursor
+        schema:
+          type: string
+          nullable: true
+      responses:
+        '200':
+          description: text/event-stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: SSE event stream of job state changes
+  /v1/jobs/{job_id}/logs:
+    get:
+      tags:
+      - Ops
+      summary: Tail logs for a job
+      parameters:
+      - in: path
+        name: job_id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tail
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 200
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lines:
+                    type: array
+                    items:
+                      type: string
+  /v1/providers:
+    get:
+      tags:
+      - Providers
+      summary: List available providers
+      parameters:
+      - in: query
+        name: kind
+        schema:
+          type: string
+          enum:
+          - tts
+          - image
+          - music
+          - compose
+      - $ref: '#/components/parameters/PaginationCursor'
+      - $ref: '#/components/parameters/PaginationLimit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponseProviders'
+  /v1/providers/{provider_id}:
+    get:
+      tags:
+      - Providers
+      summary: Get provider metadata
+      parameters:
+      - $ref: '#/components/parameters/ProviderId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/providers/{provider_id}/health:
+    get:
+      tags:
+      - Health
+      summary: Get provider health snapshot
+      parameters:
+      - $ref: '#/components/parameters/ProviderId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderHealth'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/providers/{provider_id}/capabilities:
+    get:
+      tags:
+      - Capabilities
+      summary: Get capabilities for a specific provider
+      parameters:
+      - $ref: '#/components/parameters/ProviderId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Capabilities'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/capabilities:
+    get:
+      tags:
+      - Capabilities
+      summary: Describe capabilities (optionally filtered by kind or provider)
+      parameters:
+      - in: query
+        name: provider
+        schema:
+          type: string
+      - in: query
+        name: kind
+        schema:
+          type: string
+          enum:
+          - tts
+          - image
+          - music
+          - compose
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Capabilities'
+  /v1/presets:
+    get:
+      tags:
+      - Presets
+      summary: List presets
+      parameters:
+      - in: query
+        name: provider
+        schema:
+          type: string
+      - in: query
+        name: kind
+        schema:
+          type: string
+          enum:
+          - tts
+          - image
+          - music
+          - compose
+      - $ref: '#/components/parameters/PaginationCursor'
+      - $ref: '#/components/parameters/PaginationLimit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponsePresets'
+    post:
+      tags:
+      - Presets
+      summary: Create preset
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PresetCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preset'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /v1/presets/{preset_id}:
+    get:
+      tags:
+      - Presets
+      summary: Fetch preset
+      parameters:
+      - $ref: '#/components/parameters/PresetId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preset'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Presets
+      summary: Delete preset
+      parameters:
+      - $ref: '#/components/parameters/PresetId'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      required: true
+      schema:
+        type: string
+      description: Provide a stable UUID so POST can be safely retried.
+    PaginationCursor:
+      in: query
+      name: cursor
+      schema:
+        type: string
+        nullable: true
+    PaginationLimit:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 50
+    AssetId:
+      in: path
+      name: asset_id
+      required: true
+      schema:
+        type: string
+    ScriptId:
+      in: path
+      name: script_id
+      required: true
+      schema:
+        type: string
+    VoiceoverId:
+      in: path
+      name: voiceover_id
+      required: true
+      schema:
+        type: string
+    ImageJobId:
+      in: path
+      name: image_job_id
+      required: true
+      schema:
+        type: string
+    SlideshowId:
+      in: path
+      name: slideshow_id
+      required: true
+      schema:
+        type: string
+    BackgroundMusicId:
+      in: path
+      name: music_id
+      required: true
+      schema:
+        type: string
+    SlideshowVideoId:
+      in: path
+      name: video_id
+      required: true
+      schema:
+        type: string
+    ProviderId:
+      in: path
+      name: provider_id
+      required: true
+      schema:
+        type: string
+    PresetId:
+      in: path
+      name: preset_id
+      required: true
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unprocessable:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: invalid_param
+            message:
+              type: string
+            field:
+              type: string
+              nullable: true
+            hint:
+              type: string
+              nullable: true
+            docs:
+              type: string
+              format: uri
+              nullable: true
+      required:
+      - error
+    Artifact:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        mime:
+          type: string
+        duration_sec:
+          type: number
+          nullable: true
+        resolution:
+          type: string
+          nullable: true
+      required:
+      - url
+      - mime
+    Webhook:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        secret:
+          type: string
+      required:
+      - url
+    AssetCreate:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum:
+          - direct_upload
+          - presigned_init
+          default: direct_upload
+        filename:
+          type: string
+        mime:
+          type: string
+        size_bytes:
+          type: integer
+      required:
+      - mode
+      - filename
+      - mime
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+          format: uri
+          nullable: true
+        mime:
+          type: string
+        size_bytes:
+          type: integer
+          nullable: true
+        checksum:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - id
+      - mime
+      - created_at
+    ScriptCreate:
+      type: object
+      properties:
+        input:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - text
+              - json
+            text:
+              type: string
+              nullable: true
+            json:
+              type: object
+              nullable: true
+              additionalProperties: true
+          required:
+          - type
+        options:
+          type: object
+          properties:
+            normalize:
+              type: boolean
+              default: true
+            segment:
+              type: string
+              enum:
+              - none
+              - sentence
+              - paragraph
+              - section
+              default: section
+      required:
+      - input
+    Script:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - succeeded
+          - failed
+        created_at:
+          type: string
+          format: date-time
+        sections:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              text:
+                type: string
+      required:
+      - id
+      - status
+      - created_at
+    ListResponseScripts:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Script'
+        next:
+          type: string
+          nullable: true
+        prev:
+          type: string
+          nullable: true
+    Voice:
+      type: object
+      properties:
+        id:
+          type: string
+        provider:
+          type: string
+        name:
+          type: string
+        style_tags:
+          type: array
+          items:
+            type: string
+      required:
+      - id
+      - provider
+    VoiceCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        provider:
+          type: string
+        source_asset_id:
+          type: string
+      required:
+      - name
+      - provider
+      - source_asset_id
+    VoiceoverCreate:
+      type: object
+      properties:
+        script:
+          oneOf:
+          - type: object
+            properties:
+              script_id:
+                type: string
+            required:
+            - script_id
+          - type: object
+            properties:
+              type:
+                const: text
+              text:
+                type: string
+            required:
+            - type
+            - text
+        voice:
+          oneOf:
+          - type: object
+            properties:
+              voice_id:
+                type: string
+            required:
+            - voice_id
+          - type: object
+            properties:
+              provider:
+                type: string
+              name:
+                type: string
+            required:
+            - provider
+            - name
+        options:
+          type: object
+          properties:
+            pace:
+              type: string
+              enum:
+              - slow
+              - medium
+              - fast
+              default: medium
+            emphasis:
+              type: string
+              enum:
+              - soft
+              - normal
+              - strong
+              default: normal
+            format:
+              type: string
+              enum:
+              - wav
+              - mp3
+              default: wav
+            sample_rate_hz:
+              type: integer
+              default: 48000
+            ssml:
+              type: boolean
+              default: true
+        webhook:
+          $ref: '#/components/schemas/Webhook'
+      required:
+      - script
+      - voice
+    VoiceoverJob:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - failed
+        artifact:
+          $ref: '#/components/schemas/Artifact'
+        markers:
+          type: array
+          items:
+            type: object
+            properties:
+              section_id:
+                type: string
+              time_sec:
+                type: number
+    ListResponseVoiceovers:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoiceoverJob'
+        next:
+          type: string
+          nullable: true
+        prev:
+          type: string
+          nullable: true
+    BeatsCreate:
+      type: object
+      properties:
+        script:
+          oneOf:
+          - type: object
+            properties:
+              script_id:
+                type: string
+            required:
+            - script_id
+          - type: object
+            properties:
+              type:
+                const: text
+              text:
+                type: string
+            required:
+            - type
+            - text
+        options:
+          type: object
+          properties:
+            granularity:
+              type: string
+              enum:
+              - sentence
+              - paragraph
+              - section
+              default: section
+            max_beats:
+              type: integer
+      required:
+      - script
+    Beats:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - succeeded
+          - failed
+        beats:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              section_id:
+                type: string
+                nullable: true
+              title:
+                type: string
+                nullable: true
+              summary:
+                type: string
+                nullable: true
+      required:
+      - id
+      - status
+      - beats
+    ImageCreate:
+      type: object
+      properties:
+        provider:
+          type: string
+          example: genai
+        mode:
+          type: string
+          enum:
+          - generate
+          - search
+          default: generate
+        prompt:
+          type: string
+          nullable: true
+        query:
+          type: string
+          nullable: true
+        count:
+          type: integer
+          default: 4
+          minimum: 1
+          maximum: 20
+        aspect_ratio:
+          type: string
+          default: '16:9'
+        negative_prompt:
+          type: string
+          nullable: true
+        assets:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              role:
+                type: string
+                example: style_ref
+            required:
+            - id
+      required:
+      - provider
+      - mode
+    ImageItem:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - failed
+        artifact:
+          $ref: '#/components/schemas/Artifact'
+    ImageJob:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - failed
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageItem'
+    ListResponseImageJobs:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageJob'
+        next:
+          type: string
+          nullable: true
+        prev:
+          type: string
+          nullable: true
+    SlideshowCreate:
+      type: object
+      properties:
+        beats:
+          oneOf:
+          - type: object
+            properties:
+              beats_id:
+                type: string
+            required:
+            - beats_id
+          - type: object
+            properties:
+              items:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BeatItem'
+            required:
+            - items
+        image_strategy:
+          type: object
+          properties:
+            mode:
+              type: string
+              enum:
+              - generate
+              - search
+              - mix
+              default: generate
+            provider:
+              type: string
+            per_beat:
+              type: integer
+              default: 1
+            prompt_template:
+              type: string
+              nullable: true
+            prefer_asset_ids:
+              type: array
+              items:
+                type: string
+        caption_strategy:
+          type: object
+          properties:
+            source:
+              type: string
+              enum:
+              - beat_title
+              - beat_summary
+              - section_excerpt
+              - none
+              default: beat_summary
+            max_chars:
+              type: integer
+              default: 120
+        timing_strategy:
+          type: object
+          properties:
+            mode:
+              type: string
+              enum:
+              - auto
+              - fixed
+              - fit-voiceover
+              default: auto
+            per_slide_sec:
+              type: number
+              default: 4.0
+            voiceover_id:
+              type: string
+              nullable: true
+      required:
+      - beats
+      - image_strategy
+    BeatItem:
+      type: object
+      properties:
+        id:
+          type: string
+        section_id:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        summary:
+          type: string
+          nullable: true
+    Slideshow:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - succeeded
+          - failed
+        slides:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              beat_id:
+                type: string
+                nullable: true
+              image:
+                type: object
+                properties:
+                  asset_id:
+                    type: string
+                    nullable: true
+                  url:
+                    type: string
+                    nullable: true
+              caption:
+                type: string
+                nullable: true
+              start_sec:
+                type: number
+              duration_sec:
+                type: number
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              nullable: true
+            render:
+              type: string
+              nullable: true
+    ListResponseSlideshows:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Slideshow'
+        next:
+          type: string
+          nullable: true
+        prev:
+          type: string
+          nullable: true
+    BackgroundMusicCreate:
+      type: object
+      properties:
+        target:
+          type: object
+          properties:
+            voiceover_id:
+              type: string
+            slideshow_id:
+              type: string
+        options:
+          type: object
+          properties:
+            style:
+              type: string
+            bpm:
+              type: integer
+              nullable: true
+            intensity_curve:
+              type: string
+              enum:
+              - flat
+              - rise
+              - rise-plateau-outro
+              default: rise-plateau-outro
+            stems:
+              type: boolean
+              default: false
+            duration_policy:
+              type: string
+              enum:
+              - fit
+              - exact
+              - at_least
+              default: fit
+      required:
+      - target
+    BackgroundMusicJob:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - failed
+        artifact:
+          $ref: '#/components/schemas/Artifact'
+    SlideshowVideoCreate:
+      type: object
+      properties:
+        voiceover_id:
+          type: string
+        slideshow_id:
+          type: string
+        music_id:
+          type: string
+          nullable: true
+        options:
+          type: object
+          properties:
+            transition:
+              type: string
+              enum:
+              - cut
+              - crossfade
+              default: crossfade
+            transition_sec:
+              type: number
+              default: 0.5
+            resolution:
+              type: string
+              default: 1080p
+            fps:
+              type: integer
+              default: 30
+            captions:
+              type: object
+              properties:
+                mode:
+                  type: string
+                  enum:
+                  - none
+                  - burn-in
+                  - sidecar
+                  default: burn-in
+                style:
+                  type: string
+                  nullable: true
+            ducking:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                  default: true
+                threshold_db:
+                  type: number
+                  default: -12
+                attack_ms:
+                  type: integer
+                  default: 120
+                release_ms:
+                  type: integer
+                  default: 300
+      required:
+      - voiceover_id
+      - slideshow_id
+    SlideshowVideoJob:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - failed
+        artifact:
+          $ref: '#/components/schemas/Artifact'
+        tracks:
+          type: object
+          properties:
+            voiceover:
+              type: object
+              properties:
+                id:
+                  type: string
+                start_sec:
+                  type: number
+            music:
+              type: object
+              properties:
+                id:
+                  type: string
+                start_sec:
+                  type: number
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              nullable: true
+            clips:
+              type: string
+              nullable: true
+    Provider:
+      type: object
+      properties:
+        id:
+          type: string
+          example: genai
+        kind:
+          type: string
+          enum:
+          - tts
+          - image
+          - music
+          - compose
+          description: Primary modality
+        name:
+          type: string
+          example: GenAI Images
+        status:
+          type: string
+          enum:
+          - available
+          - degraded
+          - unavailable
+          default: available
+        regions:
+          type: array
+          items:
+            type: string
+        latency_ms_estimate:
+          type: integer
+          nullable: true
+        quota:
+          type: object
+          properties:
+            rate_limit_per_min:
+              type: integer
+              nullable: true
+            burst:
+              type: integer
+              nullable: true
+        billing_unit:
+          type: string
+          example: credits
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+      - id
+      - kind
+      - status
+    ProviderHealth:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - available
+          - degraded
+          - unavailable
+        since:
+          type: string
+          format: date-time
+        metrics:
+          type: object
+          properties:
+            success_rate_5m:
+              type: number
+            p50_ms:
+              type: integer
+            p95_ms:
+              type: integer
+        notes:
+          type: string
+          nullable: true
+      required:
+      - id
+      - status
+      - since
+    Capabilities:
+      type: object
+      properties:
+        tts:
+          type: object
+          properties:
+            voices:
+              type: array
+              items:
+                type: string
+            languages:
+              type: array
+              items:
+                type: string
+            sample_rates_hz:
+              type: array
+              items:
+                type: integer
+            formats:
+              type: array
+              items:
+                type: string
+            features:
+              type: array
+              items:
+                type: string
+                example: ssml
+        image:
+          type: object
+          properties:
+            modes:
+              type: array
+              items:
+                type: string
+                enum:
+                - generate
+                - search
+            max_resolution:
+              type: array
+              items:
+                type: string
+            aspect_ratios:
+              type: array
+              items:
+                type: string
+            features:
+              type: array
+              items:
+                type: string
+                example: style_ref
+        music:
+          type: object
+          properties:
+            styles:
+              type: array
+              items:
+                type: string
+            supports_stems:
+              type: boolean
+            max_duration_sec:
+              type: integer
+        compose:
+          type: object
+          properties:
+            transitions:
+              type: array
+              items:
+                type: string
+            fps:
+              type: array
+              items:
+                type: integer
+            resolutions:
+              type: array
+              items:
+                type: string
+      additionalProperties: true
+    Preset:
+      type: object
+      properties:
+        id:
+          type: string
+        provider:
+          type: string
+        kind:
+          type: string
+          enum:
+          - tts
+          - image
+          - music
+          - compose
+        defaults:
+          type: object
+          additionalProperties: true
+        label:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - id
+      - provider
+      - kind
+      - defaults
+    PresetCreate:
+      allOf:
+      - $ref: '#/components/schemas/Preset'
+    ListResponseProviders:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Provider'
+        next:
+          type: string
+          nullable: true
+        prev:
+          type: string
+          nullable: true
+    ListResponsePresets:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Preset'
+        next:
+          type: string
+          nullable: true
+        prev:
+          type: string
+          nullable: true

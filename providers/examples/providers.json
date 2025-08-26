@@ -22,5 +22,13 @@
     "description": "Text-to-speech and voice synthesis",
     "url": "https://elevenlabs.io",
     "status": "active"
+  },
+  {
+    "id": "openrouter",
+    "name": "OpenRouter",
+    "category": "text",
+    "description": "Unified API for LLMs",
+    "url": "https://openrouter.ai",
+    "status": "active"
   }
 ]

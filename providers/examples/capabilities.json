@@ -12,5 +12,12 @@
     "type": "music",
     "input_schema": "MusicRequest",
     "output_schema": "MusicResponse"
+  },
+  {
+    "id": "text-gen",
+    "name": "Text Generation",
+    "type": "text",
+    "input_schema": "TextRequest",
+    "output_schema": "TextResponse"
   }
 ]

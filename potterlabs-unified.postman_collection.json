@@ -1,0 +1,87 @@
+{
+  "info": {
+    "name": "Potterlabs Unified (Providers + Slideshow)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Providers",
+      "item": [
+        {
+          "name": "List Providers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/providers", "host": ["{{baseUrl}}"], "path": ["providers"] }
+          }
+        },
+        {
+          "name": "Get Provider (by ID)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/providers/{{providerId}}", "host": ["{{baseUrl}}"], "path": ["providers", "{{providerId}}"] }
+          }
+        },
+        {
+          "name": "Get Capabilities (by ID)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/providers/{{providerId}}/capabilities", "host": ["{{baseUrl}}"], "path": ["providers", "{{providerId}}", "capabilities"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Slideshow",
+      "item": [
+        {
+          "name": "Generate Images",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{idempotencyKey}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/v1/images", "host": ["{{baseUrl}}"], "path": ["v1", "images"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"genai\",\n  \"mode\": \"generate\",\n  \"prompt\": \"A dragon flying over mountains\",\n  \"count\": 4,\n  \"aspect_ratio\": \"16:9\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Script",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{idempotencyKey}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/v1/scripts", "host": ["{{baseUrl}}"], "path": ["v1", "scripts"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"input\": { \"type\": \"text\", \"text\": \"INTRO...\\n\\nSECTION 1...\" },\n  \"options\": { \"normalize\": true, \"segment\": \"section\" }\n}"
+            }
+          }
+        },
+        {
+          "name": "Compose Slideshow Video",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{idempotencyKey}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/v1/slideshow-videos", "host": ["{{baseUrl}}"], "path": ["v1", "slideshow-videos"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"voiceover_id\": \"vo_7\",\n  \"slideshow_id\": \"ss_9\",\n  \"music_id\": \"bgm_2\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
