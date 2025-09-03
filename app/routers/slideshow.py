@@ -1,48 +1,29 @@
 from __future__ import annotations
 
-import json
-from pathlib import Path
 from typing import Any, Dict
 
-from fastapi import APIRouter, Body, status
+from fastapi import APIRouter, Body, status, Depends
 
 from ..utils.validation import validate_body, load_schema
 from ..utils.stubgen import generate_stub
-
+from ..config import Settings, get_settings
+from ..utils.common import _read_json, _maybe_example
 
 router = APIRouter(prefix="/v1", tags=["Slideshow"])
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-SCHEMAS_DIR = REPO_ROOT / "slideshow" / "schemas"
-EXAMPLES_DIR = REPO_ROOT / "slideshow" / "examples"
 
-
-def _read_json(path: Path) -> Any:
-    with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def _response_from_schema(schema_file: str) -> Any:
-    schema = load_schema(SCHEMAS_DIR / schema_file)
+def _response_from_schema(schema_file: str, settings: Settings) -> Any:
+    schema = load_schema(settings.SLIDESHOW_SCHEMAS_PATH / schema_file)
     return generate_stub(schema)
 
 
-def _maybe_example(name: str) -> Dict[str, Any] | None:
-    # Reserved to support future response examples; request examples exist today.
-    # If a corresponding "<name>.response.json" exists, return it.
-    p = EXAMPLES_DIR / f"{name}.response.json"
-    if p.exists():
-        return _read_json(p)
-    return None
-
-
 @router.post("/scripts", status_code=status.HTTP_201_CREATED)
-async def create_script(payload: Dict[str, Any] = Body(...)) -> Any:
-    validate_body(payload, SCHEMAS_DIR / "ScriptCreate.json")
-    example = _maybe_example("scripts.create")
+async def create_script(payload: Dict[str, Any] = Body(...), settings: Settings = Depends(get_settings)) -> Any:
+    validate_body(payload, settings.SLIDESHOW_SCHEMAS_PATH / "ScriptCreate.json")
+    example = _maybe_example("scripts.create", settings.SLIDESHOW_EXAMPLES_PATH)
     if example is not None:
         return example
-    return _response_from_schema("Script.json")
+    return _response_from_schema("Script.json", settings)
 
 
 @router.get("/scripts")
@@ -52,8 +33,8 @@ async def list_scripts() -> Any:
 
 
 @router.get("/scripts/{script_id}")
-async def get_script(script_id: str) -> Any:
-    data = _response_from_schema("Script.json")
+async def get_script(script_id: str, settings: Settings = Depends(get_settings)) -> Any:
+    data = _response_from_schema("Script.json", settings)
     if isinstance(data, dict):
         data.setdefault("id", script_id)
         data.setdefault("status", "succeeded")
@@ -63,12 +44,12 @@ async def get_script(script_id: str) -> Any:
 
 
 @router.post("/beats", status_code=status.HTTP_201_CREATED)
-async def create_beats(payload: Dict[str, Any] = Body(...)) -> Any:
-    validate_body(payload, SCHEMAS_DIR / "BeatsCreate.json")
-    example = _maybe_example("beats.create")
+async def create_beats(payload: Dict[str, Any] = Body(...), settings: Settings = Depends(get_settings)) -> Any:
+    validate_body(payload, settings.SLIDESHOW_SCHEMAS_PATH / "BeatsCreate.json")
+    example = _maybe_example("beats.create", settings.SLIDESHOW_EXAMPLES_PATH)
     if example is not None:
         return example
-    return _response_from_schema("Beats.json")
+    return _response_from_schema("Beats.json", settings)
 
 
 @router.get("/beats")
@@ -78,12 +59,12 @@ async def list_beats() -> Any:
 
 
 @router.post("/images", status_code=status.HTTP_202_ACCEPTED)
-async def create_images(payload: Dict[str, Any] = Body(...)) -> Any:
-    validate_body(payload, SCHEMAS_DIR / "ImageCreate.json")
-    example = _maybe_example("images.create")
+async def create_images(payload: Dict[str, Any] = Body(...), settings: Settings = Depends(get_settings)) -> Any:
+    validate_body(payload, settings.SLIDESHOW_SCHEMAS_PATH / "ImageCreate.json")
+    example = _maybe_example("images.create", settings.SLIDESHOW_EXAMPLES_PATH)
     if example is not None:
         return example
-    return _response_from_schema("ImageJob.json")
+    return _response_from_schema("ImageJob.json", settings)
 
 
 @router.get("/images")
@@ -92,8 +73,8 @@ async def list_images() -> Any:
 
 
 @router.get("/images/{image_job_id}")
-async def get_image_job(image_job_id: str) -> Any:
-    data = _response_from_schema("ImageJob.json")
+async def get_image_job(image_job_id: str, settings: Settings = Depends(get_settings)) -> Any:
+    data = _response_from_schema("ImageJob.json", settings)
     if isinstance(data, dict):
         data.setdefault("id", image_job_id)
         data.setdefault("status", "succeeded")
@@ -101,12 +82,12 @@ async def get_image_job(image_job_id: str) -> Any:
 
 
 @router.post("/voiceovers", status_code=status.HTTP_202_ACCEPTED)
-async def create_voiceovers(payload: Dict[str, Any] = Body(...)) -> Any:
-    validate_body(payload, SCHEMAS_DIR / "VoiceoverCreate.json")
-    example = _maybe_example("voiceovers.create")
+async def create_voiceovers(payload: Dict[str, Any] = Body(...), settings: Settings = Depends(get_settings)) -> Any:
+    validate_body(payload, settings.SLIDESHOW_SCHEMAS_PATH / "VoiceoverCreate.json")
+    example = _maybe_example("voiceovers.create", settings.SLIDESHOW_EXAMPLES_PATH)
     if example is not None:
         return example
-    return _response_from_schema("VoiceoverJob.json")
+    return _response_from_schema("VoiceoverJob.json", settings)
 
 
 @router.get("/voiceovers")
@@ -115,8 +96,8 @@ async def list_voiceovers() -> Any:
 
 
 @router.get("/voiceovers/{voiceover_id}")
-async def get_voiceover(voiceover_id: str) -> Any:
-    data = _response_from_schema("VoiceoverJob.json")
+async def get_voiceover(voiceover_id: str, settings: Settings = Depends(get_settings)) -> Any:
+    data = _response_from_schema("VoiceoverJob.json", settings)
     if isinstance(data, dict):
         data.setdefault("id", voiceover_id)
         data.setdefault("status", "succeeded")
@@ -124,17 +105,17 @@ async def get_voiceover(voiceover_id: str) -> Any:
 
 
 @router.post("/background-music", status_code=status.HTTP_202_ACCEPTED)
-async def create_background_music(payload: Dict[str, Any] = Body(...)) -> Any:
-    validate_body(payload, SCHEMAS_DIR / "BackgroundMusicCreate.json")
-    example = _maybe_example("background-music.create")
+async def create_background_music(payload: Dict[str, Any] = Body(...), settings: Settings = Depends(get_settings)) -> Any:
+    validate_body(payload, settings.SLIDESHOW_SCHEMAS_PATH / "BackgroundMusicCreate.json")
+    example = _maybe_example("background-music.create", settings.SLIDESHOW_EXAMPLES_PATH)
     if example is not None:
         return example
-    return _response_from_schema("BackgroundMusicJob.json")
+    return _response_from_schema("BackgroundMusicJob.json", settings)
 
 
 @router.get("/background-music/{music_id}")
-async def get_background_music(music_id: str) -> Any:
-    data = _response_from_schema("BackgroundMusicJob.json")
+async def get_background_music(music_id: str, settings: Settings = Depends(get_settings)) -> Any:
+    data = _response_from_schema("BackgroundMusicJob.json", settings)
     if isinstance(data, dict):
         data.setdefault("id", music_id)
         data.setdefault("status", "succeeded")
@@ -142,12 +123,12 @@ async def get_background_music(music_id: str) -> Any:
 
 
 @router.post("/slideshows", status_code=status.HTTP_201_CREATED)
-async def create_slideshows(payload: Dict[str, Any] = Body(...)) -> Any:
-    validate_body(payload, SCHEMAS_DIR / "SlideshowCreate.json")
-    example = _maybe_example("slideshows.create")
+async def create_slideshows(payload: Dict[str, Any] = Body(...), settings: Settings = Depends(get_settings)) -> Any:
+    validate_body(payload, settings.SLIDESHOW_SCHEMAS_PATH / "SlideshowCreate.json")
+    example = _maybe_example("slideshows.create", settings.SLIDESHOW_EXAMPLES_PATH)
     if example is not None:
         return example
-    return _response_from_schema("Slideshow.json")
+    return _response_from_schema("Slideshow.json", settings)
 
 
 @router.get("/slideshows")
@@ -156,29 +137,39 @@ async def list_slideshows() -> Any:
 
 
 @router.get("/slideshows/{slideshow_id}")
-async def get_slideshow(slideshow_id: str) -> Any:
-    data = _response_from_schema("Slideshow.json")
+async def get_slideshow(slideshow_id: str, settings: Settings = Depends(get_settings)) -> Any:
+    data = _response_from_schema("Slideshow.json", settings)
     if isinstance(data, dict):
         data.setdefault("id", slideshow_id)
     return data
 
 
 @router.post("/slideshow-videos", status_code=status.HTTP_202_ACCEPTED)
-async def create_slideshow_videos(payload: Dict[str, Any] = Body(...)) -> Any:
-    validate_body(payload, SCHEMAS_DIR / "SlideshowVideoCreate.json")
-    example = _maybe_example("slideshow-videos.create")
+async def create_slideshow_videos(payload: Dict[str, Any] = Body(...), settings: Settings = Depends(get_settings)) -> Any:
+    validate_body(payload, settings.SLIDESHOW_SCHEMAS_PATH / "SlideshowVideoCreate.json")
+    example = _maybe_example("slideshow-videos.create", settings.SLIDESHOW_EXAMPLES_PATH)
     if example is not None:
         return example
-    return _response_from_schema("SlideshowVideoJob.json")
+    return _response_from_schema("SlideshowVideoJob.json", settings)
 
 
 @router.get("/slideshow-videos/{video_id}")
-async def get_slideshow_video(video_id: str) -> Any:
-    data = _response_from_schema("SlideshowVideoJob.json")
+async def get_slideshow_video(video_id: str, settings: Settings = Depends(get_settings)) -> Any:
+    data = _response_from_schema("SlideshowVideoJob.json", settings)
     if isinstance(data, dict):
         data.setdefault("id", video_id)
         data.setdefault("status", "succeeded")
     return data
+
+
+@router.get("/events")
+async def get_events() -> Any:
+    return {"events": []}
+
+
+@router.get("/jobs/{job_id}/logs")
+async def get_job_logs(job_id: str) -> Any:
+    return {"lines": []}
 
 
 # Voices and Assets minimal support
@@ -188,21 +179,21 @@ async def list_voices() -> Any:
 
 
 @router.post("/voices", status_code=status.HTTP_201_CREATED)
-async def create_voice(payload: Dict[str, Any] = Body(...)) -> Any:
-    validate_body(payload, SCHEMAS_DIR / "VoiceCreate.json")
-    data = _response_from_schema("Voice.json")
+async def create_voice(payload: Dict[str, Any] = Body(...), settings: Settings = Depends(get_settings)) -> Any:
+    validate_body(payload, settings.SLIDESHOW_SCHEMAS_PATH / "VoiceCreate.json")
+    data = _response_from_schema("Voice.json", settings)
     return data
 
 
 @router.post("/assets", status_code=status.HTTP_201_CREATED)
-async def create_asset(payload: Dict[str, Any] = Body(...)) -> Any:
-    validate_body(payload, SCHEMAS_DIR / "AssetCreate.json")
-    return _response_from_schema("Asset.json")
+async def create_asset(payload: Dict[str, Any] = Body(...), settings: Settings = Depends(get_settings)) -> Any:
+    validate_body(payload, settings.SLIDESHOW_SCHEMAS_PATH / "AssetCreate.json")
+    return _response_from_schema("Asset.json", settings)
 
 
 @router.get("/assets/{asset_id}")
-async def get_asset(asset_id: str) -> Any:
-    data = _response_from_schema("Asset.json")
+async def get_asset(asset_id: str, settings: Settings = Depends(get_settings)) -> Any:
+    data = _response_from_schema("Asset.json", settings)
     if isinstance(data, dict):
         data.setdefault("id", asset_id)
     return data

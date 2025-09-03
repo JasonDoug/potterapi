@@ -1,6 +1,7 @@
 import logging
 from fastapi import FastAPI, Request
-from .routers import providers, slideshow
+from .routers import providers, slideshow, video, story
+from .exceptions import ProviderNotFoundException, provider_not_found_exception_handler
 
 
 def create_app() -> FastAPI:
@@ -10,10 +11,14 @@ def create_app() -> FastAPI:
         description="FastAPI server for Providers and Slideshow groups (work in progress).",
     )
 
+    app.add_exception_handler(ProviderNotFoundException, provider_not_found_exception_handler)
+
     # Include providers at root to match spec (e.g., /providers)
     app.include_router(providers.router)
     # Slideshow routes under /v1
     app.include_router(slideshow.router)
+    app.include_router(video.router)
+    app.include_router(story.router)
 
     @app.get("/health", tags=["Health"])  # simple health check
     async def health():
