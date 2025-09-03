@@ -111,6 +111,10 @@ components:
           required: [prompt]
     VideoJob:
       type: object
+      required:
+        - id
+        - status
+        - artifact_url
       properties:
         id: { type: string }
         status: { type: string }
@@ -122,6 +126,9 @@ components:
         beats: { type: array, items: { type: string } }
     Storyboard:
       type: object
+      required:
+        - id
+        - scenes
       properties:
         id: { type: string }
         scenes: { type: array, items: { type: string } }

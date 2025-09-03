@@ -133,3 +133,6 @@ output/
 # Development files
 .vscode/settings.json
 .vscode/launch.json
+
+.gemini/
+gha-creds-*.json
