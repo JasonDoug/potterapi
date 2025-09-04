@@ -1,0 +1,29 @@
+**Endpoints with Test Coverage (100% pass rate):**
+
+*   `/health`
+*   `/providers`
+*   `/providers/{id}`
+*   `/providers/{id}/capabilities`
+
+**Endpoints without Test Coverage:**
+
+*   `/openapi.json`
+*   `/docs`
+*   `/docs/oauth2-redirect`
+*   `/redoc`
+*   `/v1/scripts` (POST, GET)
+*   `/v1/scripts/{script_id}`
+*   `/v1/beats` (POST, GET)
+*   `/v1/images` (POST, GET)
+*   `/v1/images/{image_job_id}`
+*   `/v1/voiceovers` (POST, GET)
+*   `/v1/voiceovers/{voiceover_id}`
+*   `/v1/background-music` (POST)
+*   `/v1/background-music/{music_id}`
+*   `/v1/slideshows` (POST, GET)
+*   `/v1/slideshows/{slideshow_id}`
+*   `/v1/slideshow-videos` (POST)
+*   `/v1/slideshow-videos/{video_id}`
+*   `/v1/voices` (POST, GET)
+*   `/v1/assets` (POST)
+*   `/v1/assets/{asset_id}`
