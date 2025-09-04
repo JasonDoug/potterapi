@@ -3,17 +3,13 @@ from __future__ import annotations
 from pathlib import Path
 from typing import List, Dict, Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, AnyUrl, Field
 
+from ..config import Settings, get_settings
+from ..exceptions import ProviderNotFoundException
 
 router = APIRouter(tags=["Providers"])
-
-
-# Data loading utilities
-REPO_ROOT = Path(__file__).resolve().parents[2]
-PROVIDERS_JSON = REPO_ROOT / "providers" / "examples" / "providers.json"
-CAPABILITIES_JSON = REPO_ROOT / "providers" / "examples" / "capabilities.json"
 
 
 class Provider(BaseModel):
@@ -40,13 +36,13 @@ def _load_json(path: Path) -> Any:
         return json.load(f)
 
 
-def _all_providers() -> List[Provider]:
-    data = _load_json(PROVIDERS_JSON)
+def _all_providers(settings: Settings) -> List[Provider]:
+    data = _load_json(settings.PROVIDERS_EXAMPLES_PATH / "providers.json")
     return [Provider(**p) for p in data]
 
 
-def _all_capabilities() -> List[Capability]:
-    data = _load_json(CAPABILITIES_JSON)
+def _all_capabilities(settings: Settings) -> List[Capability]:
+    data = _load_json(settings.PROVIDERS_EXAMPLES_PATH / "capabilities.json")
     return [Capability(**c) for c in data]
 
 
@@ -59,24 +55,24 @@ CAPABILITY_MAP: Dict[str, List[str]] = {
 
 
 @router.get("/providers", response_model=List[Provider])
-async def list_providers() -> List[Provider]:
-    return _all_providers()
+async def list_providers(settings: Settings = Depends(get_settings)) -> List[Provider]:
+    return _all_providers(settings)
 
 
 @router.get("/providers/{id}", response_model=Provider)
-async def get_provider(id: str) -> Provider:
-    for p in _all_providers():
+async def get_provider(id: str, settings: Settings = Depends(get_settings)) -> Provider:
+    for p in _all_providers(settings):
         if p.id == id:
             return p
-    raise HTTPException(status_code=404, detail={"error": "not_found", "message": f"Provider '{id}' not found"})
+    raise ProviderNotFoundException(id)
 
 
 @router.get("/providers/{id}/capabilities", response_model=List[Capability])
-async def list_capabilities(id: str) -> List[Capability]:
+async def list_capabilities(id: str, settings: Settings = Depends(get_settings)) -> List[Capability]:
     # Validate provider exists
-    _ = await get_provider(id)
+    await get_provider(id, settings)
 
-    caps = _all_capabilities()
+    caps = _all_capabilities(settings)
     names = CAPABILITY_MAP.get(id)
     if names:
         return [c for c in caps if c.id in names]
